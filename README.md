@@ -1,6 +1,7 @@
 # Sumidoku website
 
-The Sumidoku project site and documentation hub.
+The Sumidoku project site and documentation hub, served at
+<https://sumidoku.github.io>.
 
 Built with [Nimbus](https://nimbus-docs.com) (Astro). The landing page is
 `src/pages/index.astro`; the docs live under `src/content/docs/docs/` and are
@@ -21,14 +22,9 @@ Node 22 LTS is recommended (matches CI).
 
 ## Deploy
 
-Cloudflare Workers Builds: pushes to `main` build the site
-(`npm ci && npm run build`) and deploy the `sumidoku` Worker (static assets
-from `dist/`). Add the custom domain in `wrangler.jsonc` when it is ready.
-To deploy a local build manually:
-
-```sh
-npm run deploy     # wrangler deploy
-```
+GitHub Pages, deployed by `.github/workflows/deploy.yml`: pushes to `main`
+build the site (`npm ci && npm run build`) and publish `dist/` to
+<https://sumidoku.github.io>. No manual deploy step is needed.
 
 ## Content notes
 

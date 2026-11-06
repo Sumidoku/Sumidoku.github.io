@@ -6,13 +6,13 @@ import nimbus, {
 import { tableScroll } from "@cloudflare/nimbus-docs/markdown";
 
 const nimbusConfig = defineNimbusConfig({
-  site: "https://sumidoku.app",
+  site: "https://sumidoku.github.io",
   title: "Sumidoku",
   description:
     "Sumidoku is a self-hosted manga server: Aidoku WASM and OPDS sources, a full library with reading progress and downloads, a REST API, shipped as a single binary or a Docker image.",
   locale: "en",
   github: "https://github.com/Sumidoku/Sumidoku",
-  editPattern: "https://github.com/Sumidoku/website/edit/main/{path}",
+  editPattern: "https://github.com/Sumidoku/Sumidoku.github.io/edit/main/{path}",
   socialImageAlt: "Sumidoku — self-hosted manga server",
   sidebar: {
     items: [{ label: "Docs", autogenerate: { directory: "docs" } }],
