@@ -48,13 +48,27 @@ The source code lives on GitHub:
 
 ## Quick start
 
+Save this as `docker-compose.yml`:
+
+```yaml
+services:
+  sumidoku:
+    image: sumidoku/sumidoku:latest
+    ports:
+      - "3000:3000"
+    volumes:
+      - ./config:/config
+      - ./downloads:/downloads
+```
+
 ```sh
 docker compose up -d
 ```
 
 The compose file pulls the published `sumidoku/sumidoku:latest` image and
 mounts `./config` and `./downloads`. Open http://localhost:3000 — everything
-runs with defaults.
+runs with defaults. The full compose file also wires the optional trawl
+sidecar for Cloudflare bypass; see [Installation](/docs/installation).
 
 The full install walkthrough — Docker, release binaries, the portable
 Windows desktop app, and building from source — is on the
