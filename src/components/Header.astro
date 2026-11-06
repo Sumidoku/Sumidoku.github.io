@@ -1,0 +1,187 @@
+---
+import Icon from "@cloudflare/nimbus-docs/components/Icon.astro";
+import { Button } from "./ui/button";
+import { LinkButton } from "./ui/link-button";
+import { ThemeToggle } from "./ui/theme-toggle";
+import SearchTrigger from "./ui/search/SearchTrigger.astro";
+import { config } from "virtual:nimbus/config";
+import { getSidebarSections, stripBase, withBase } from "@cloudflare/nimbus-docs/runtime";
+
+interface Props {
+  /** Astro collection id for the current page, forwarded from DocsLayout. */
+  collection?: string;
+  /** Astro entry id for the current page, forwarded from DocsLayout. */
+  entryId?: string;
+  /**
+   * Whether the page has a sidebar to open. When `false`, the mobile
+   * menu button is hidden — pages that opted out via `sidebar: false`
+   * shouldn't show a button that opens an empty dialog. Default `true`.
+   */
+  showSidebar?: boolean;
+  sections?: import("@cloudflare/nimbus-docs/types").SidebarSection[];
+}
+
+const { collection, showSidebar = true, sections: sectionsProp } = Astro.props;
+
+// Normalize trailing slash so isActive matches sidebar hrefs.
+const currentSlug = stripBase(Astro.url.pathname, import.meta.env.BASE_URL).replace(/\/$/, "") || "/";
+
+const releasesUrl = "https://github.com/Sumidoku/Sumidoku/releases/latest";
+const dockerUrl = "https://hub.docker.com/r/sumidoku/sumidoku";
+const cta = { label: "Download", href: releasesUrl };
+
+// Primary nav outside the docs section tab strip.
+const productNav = [
+  { label: "Docs", href: "/docs/intro", match: (s: string) => s === "/docs" || s.startsWith("/docs/") },
+];
+
+const sections = sectionsProp ?? (collection ? await getSidebarSections(currentSlug, { collection }) : []);
+const showSections = collection && sections.length >= 2;
+const homeHref = withBase("/", import.meta.env.BASE_URL);
+const resolveSectionHref = (href: string): string =>
+  withBase(href, import.meta.env.BASE_URL);
+---
+
+<header class="sticky top-0 z-30 border-b border-border bg-card/80 backdrop-blur-lg">
+  <div class="mx-auto flex items-center justify-between gap-3 h-14 px-4 lg:px-6">
+    <div class="flex items-center gap-3 min-w-0">
+      <slot name="brand">
+        <a href={homeHref} class="group shrink-0 flex items-center gap-2">
+          <img src={withBase("/img/logo.svg", import.meta.env.BASE_URL)} alt="Sumidoku logo" class="w-5 h-5 rounded" />
+          <span class="font-mono font-bold text-sm text-foreground group-hover:text-primary transition-colors">
+            {config.title}
+          </span>
+        </a>
+      </slot>
+
+      {showSections ? (
+        <nav aria-label="Sections" class="hidden md:flex items-center gap-1 ml-4 pl-4 border-l border-border h-6 min-w-0 overflow-x-auto [scrollbar-width:none] [&::-webkit-scrollbar]:hidden">
+          {sections.map((section) => (
+            <a
+              href={resolveSectionHref(section.href)}
+              aria-current={section.isActive ? "page" : undefined}
+              class:list={[
+                "px-2 py-1 rounded-md text-[0.8125rem] font-medium no-underline transition-colors shrink-0 whitespace-nowrap",
+                section.isActive
+                  ? "text-foreground bg-accent"
+                  : "text-muted-foreground hover:text-foreground hover:bg-accent/60",
+              ]}
+            >
+              {section.label}
+            </a>
+          ))}
+        </nav>
+      ) : (
+        <nav aria-label="Products" class="hidden md:flex items-center gap-1 ml-4 pl-4 border-l border-border h-6">
+          {productNav.map((item) => (
+            <a
+              href={item.href}
+              aria-current={item.match(currentSlug) ? "page" : undefined}
+              class:list={[
+                "px-2 py-1 rounded-md text-[0.8125rem] font-medium no-underline transition-colors whitespace-nowrap",
+                item.match(currentSlug)
+                  ? "text-foreground bg-accent"
+                  : "text-muted-foreground hover:text-foreground hover:bg-accent/60",
+              ]}
+            >
+              {item.label}
+            </a>
+          ))}
+        </nav>
+      )}
+    </div>
+
+    <div class="flex items-center gap-2 shrink-0">
+      <slot name="actions" />
+      {config.search !== false && <SearchTrigger />}
+      {config.github && (
+        <LinkButton
+          href={config.github}
+          variant="minimal"
+          shape="square"
+          size="sm"
+          aria-label="GitHub"
+          target="_blank"
+          rel="noopener"
+          class="text-muted-foreground"
+        >
+          <Icon name="ph:github-logo" class="w-4 h-4" />
+        </LinkButton>
+      )}
+      <LinkButton
+        href={dockerUrl}
+        variant="minimal"
+        shape="square"
+        size="sm"
+        aria-label="Docker Hub"
+        target="_blank"
+        rel="noopener"
+        class="text-muted-foreground"
+      >
+        <Icon name="ph:shipping-container" class="w-4 h-4" />
+      </LinkButton>
+      <ThemeToggle />
+      <a
+        href={cta.href}
+        target="_blank"
+        rel="noopener"
+        class="hidden md:inline-flex items-center gap-1.5 h-8 px-3.5 rounded-full bg-[var(--sm-cta-bg)] text-[var(--sm-cta-fg)] text-[0.8125rem] font-semibold no-underline hover:opacity-90 transition-opacity whitespace-nowrap"
+      >
+        {cta.label}
+      </a>
+      {showSidebar && collection && (
+        <Button
+          variant="ghost"
+          shape="square"
+          size="sm"
+          icon="ph:list"
+          aria-label="Open navigation"
+          data-menu-btn
+          class="md:hidden text-muted-foreground"
+        />
+      )}
+      <Button
+        variant="ghost"
+        shape="square"
+        size="sm"
+        icon="ph:dots-three-outline-vertical"
+        aria-label="Open menu"
+        aria-expanded="false"
+        data-nav-btn
+        class="md:hidden text-muted-foreground"
+      />
+    </div>
+  </div>
+
+  <div data-nav-panel class="hidden md:hidden border-t border-border bg-card px-4 py-3">
+    <nav aria-label="Menu" class="flex flex-col gap-1">
+      {productNav.map((item) => (
+        <a
+          href={item.href}
+          class="px-2 py-2 rounded-md text-sm font-medium no-underline text-foreground hover:bg-accent/60"
+        >
+          {item.label}
+        </a>
+      ))}
+      <a
+        href={cta.href}
+        target="_blank"
+        rel="noopener"
+        class="mt-1 inline-flex items-center justify-center h-9 px-4 rounded-full bg-[var(--sm-cta-bg)] text-[var(--sm-cta-fg)] text-sm font-semibold no-underline"
+      >
+        {cta.label}
+      </a>
+    </nav>
+  </div>
+</header>
+
+<script>
+  // Delegated so it keeps working after ClientRouter swaps the header.
+  document.addEventListener("click", (e) => {
+    const btn = (e.target as HTMLElement).closest("[data-nav-btn]");
+    if (!btn) return;
+    const panel = btn.closest("header")?.querySelector("[data-nav-panel]");
+    const open = panel?.classList.toggle("hidden") === false;
+    btn.setAttribute("aria-expanded", String(open));
+  });
+</script>

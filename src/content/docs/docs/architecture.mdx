@@ -1,0 +1,97 @@
+---
+title: "Architecture"
+description: "A condensed overview of the server, the WASM source runtime, and the web UI."
+sidebar:
+  order: 6
+---
+
+This page is a condensed overview. The authoritative technical contract —
+API surface, WASM runtime semantics, and data flow, verified against the
+linked source — is
+[docs/architecture.md](https://github.com/Sumidoku/Sumidoku/blob/main/docs/architecture.md)
+in the repository.
+
+## Server (`crates/server`)
+
+The server is an axum HTTP server with SQLite via sqlx. It serves the REST
+API under `/api/v1` and embeds the built web UI into the release binary
+(rust-embed over `webui/build`). It owns the library, reading progress,
+categories, downloads, scheduled library updates, backup/import, and
+authentication, plus the Windows desktop shell (tray icon, data root under
+`%LOCALAPPDATA%\Sumidoku`, headless service mode).
+
+Key API areas include sources (browse, search, listings, home pages,
+settings, login), the library and reader, downloads and updates, source
+repositories, and backups. Source settings and filters merge a package's
+static manifest data with its dynamic exports, with defaults seeded
+Aidoku-style and user-set values never overwritten.
+
+## WASM sources (`crates/wasm`)
+
+Aidoku source packages (`.aix`, zip) run server-side on the
+[wasmi](https://crates.io/crates/wasmi) interpreter. Each source instance
+is an actor that owns its store, rate limiting, and the host functions
+sources import. Every instance runs under limits from its configuration: a
+fuel budget per export call, a per-call wall-clock timeout that restarts
+the instance, and a linear-memory cap (128 MiB by default).
+
+The runtime implements the Aidoku host surface:
+
+- **Listings, search, and filters** — static manifest entries merged with
+  the dynamic `get_listings` / `get_filters` exports, normalized to one
+  API shape.
+- **Source home pages** — `get_home` layouts, streamed to clients with
+  `send_partial_result` partial-result patching.
+- **Settings** — merged static + dynamic settings, including synthesized
+  base-URL and language settings, with Aidoku `register(defaults:)`
+  seeding semantics.
+- **JavaScript execution** — the `js` context functions run on the Boa
+  engine, one isolated context per ABI descriptor, time- and loop-limited.
+- **Canvas drawing** — the `canvas` ABI rendered by tiny-skia, with text
+  laid out from `ttf-parser` outlines and fonts from an embedded DejaVu
+  fallback plus system font directories.
+- **Webview** — the script-running subset runs on Boa; navigation and
+  cookie functions run on the trawl browser backend when
+  `SUMIDOKU_NET_BROWSER_TRAWL` is set (see [Sidecars](/docs/sidecars)).
+- **Networking** — the net host aligns with Aidoku/URLSession behavior:
+  charset decoding with a strict UTF-8 pass, gzip/br/deflate, cookie jar
+  merge, and a configurable response body cap.
+
+## `vendor/aidoku`
+
+`vendor/aidoku` is the vendored upstream `aidoku` crate (with the `imports`
+feature). It tracks upstream; local fixes don't belong there.
+
+## Web UI (`webui`)
+
+The web UI is a Vite + React SPA in TypeScript, using
+`@tanstack/react-query` for server state. It covers the library, source
+browse and cross-source search, manga and reader pages, downloads,
+updates, and settings. The build lands in `webui/build` and is embedded
+into the server binary. An installable PWA shell precaches only the built
+assets — API requests and manga media are network-only; it provides an
+application shell, not offline reading.
+
+The reader supports paged and continuous/webtoon modes, right-to-left and
+left-to-right directions, double-page spreads, wide-page splitting,
+per-manga setting overrides, and client-side image filters, with reading
+direction and mode defaulting to the manga's metadata.
+
+## Data flow
+
+The browser talks to the REST API at `/api/v1` (plus SSE for live
+invalidation); browser requests authenticate with the session cookie when
+[Authentication](/docs/authentication) is on, and CLI clients use bearer
+tokens. The server persists state in SQLite under the config dir and
+spawns one wasmi actor per source instance; source calls fetch from the
+network directly, through a configured proxy, or through the trawl sidecar
+for challenged hosts. Downloaded chapters are packaged into the downloads
+directory, and the full reader state round-trips as a versioned JSON
+[backup](/docs/backup).
+
+## Full contract
+
+For the complete, source-verified contract — every endpoint's semantics,
+the WASM host-function surface, and the CI/CD pipeline — see
+[docs/architecture.md](https://github.com/Sumidoku/Sumidoku/blob/main/docs/architecture.md)
+on GitHub.

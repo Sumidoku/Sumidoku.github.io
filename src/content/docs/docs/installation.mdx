@@ -1,0 +1,91 @@
+---
+title: "Installation"
+description: "Install Sumidoku with Docker, release binaries, the portable Windows app, or from source."
+sidebar:
+  order: 1
+---
+
+## Docker Compose
+
+The quickest way to run Sumidoku is the published Docker image:
+
+```sh
+docker compose up -d
+```
+
+The compose file pulls the published `sumidoku/sumidoku:latest` image and
+mounts `./config` and `./downloads`. Open http://localhost:3000.
+
+| Volume | Purpose |
+| --- | --- |
+| `/config` | database, settings, cover cache, source packages |
+| `/downloads` | downloaded chapters |
+
+The same image is published to GitHub Container Registry as
+`ghcr.io/sumidoku/sumidoku`; point the compose `image:` at either registry.
+
+:::tip
+Everything runs with defaults — a bare `docker compose up -d` works. The
+full configuration reference (environment variables, `config.toml`,
+precedence) lives in [Configuration](/docs/configuration).
+:::
+
+## Release binaries
+
+Each [GitHub release](https://github.com/Sumidoku/Sumidoku/releases) ships
+five platform archives, built by the release pipeline: Linux x86_64 and
+aarch64, macOS x86_64 and aarch64, and Windows x86_64. Download the archive
+for your platform, extract it, and run the `sumidoku-server` binary. The
+server listens on `0.0.0.0:3000` by default and keeps its data in `./data`
+unless configured otherwise — see [Configuration](/docs/configuration).
+
+## Windows desktop app
+
+The release also ships a portable Windows app: download
+`sumidoku_<version>_x86_64-pc-windows-msvc.zip` from the
+[latest release](https://github.com/Sumidoku/Sumidoku/releases/latest),
+extract it anywhere, and run `sumidoku-server.exe`. It listens on
+http://localhost:3000 only, keeps its data under `%LOCALAPPDATA%\Sumidoku`,
+and sits in the notification area — a left click (or Open) opens the web UI,
+and the menu offers the data and log folders, Start with Windows, and Exit.
+
+Started as a service or a scheduled task it stays headless and takes the
+same configuration channels as any other install.
+
+## Building from source
+
+The web UI is embedded into the binary at compile time, so it must be built
+first:
+
+```sh
+cd webui && npm ci && npm run build && cd ..
+cargo build --release -p sumidoku-server
+```
+
+See [Development](/docs/development) for the test and lint commands and the
+repository layout.
+
+## Installing sources
+
+### Aidoku source packages
+
+Drop `.aix` source packages (or extracted source directories) into
+`./config/sources`, then press the scan button on the web UI's browse page
+(or `POST /api/v1/sources/scan`).
+
+### Source repositories
+
+You can also add an Aidoku-compatible source repository from the browse
+page and install sources from it directly — browse with language/NSFW
+filters, one-click install and update.
+
+### OPDS catalogs
+
+Use the browse page to add Komga, Kavita, Calibre-Web or other OPDS 1.2/2.0
+catalogs as sources. Multiple catalogs can be added, with optional
+per-catalog credentials.
+
+:::note
+Sumidoku consumes OPDS catalogs as sources but does not expose an OPDS API
+itself.
+:::

@@ -1,0 +1,330 @@
+---
+import BaseLayout from "../layouts/BaseLayout.astro";
+import Header from "../components/Header.astro";
+import Footer from "../components/Footer.astro";
+import { Code } from "../components/ui/code";
+import Icon from "@cloudflare/nimbus-docs/components/Icon.astro";
+import "../styles/landing.css";
+
+export const prerender = true;
+
+const repoUrl = "https://github.com/Sumidoku/Sumidoku";
+const releasesUrl = `${repoUrl}/releases/latest`;
+
+const composeFile = `services:
+  sumidoku:
+    image: sumidoku/sumidoku:latest
+    ports:
+      - "3000:3000"
+    volumes:
+      - ./config:/config      # database, settings, cover cache, sources
+      - ./downloads:/downloads
+    restart: unless-stopped`;
+
+const sourceFeatures = [
+  { title: "Aidoku WASM sources", icon: "ph:puzzle-piece" },
+  { title: "Source repositories", icon: "ph:archive" },
+  { title: "Local source", icon: "ph:folder-open" },
+  { title: "OPDS catalogs", icon: "ph:books" },
+  { title: "JavaScript execution", icon: "ph:brackets-curly" },
+  { title: "Cloudflare bypass", icon: "ph:cloud-check" },
+];
+
+const libraryFeatures = [
+  { title: "Categories & filter groups", icon: "ph:funnel" },
+  { title: "Reading progress & history", icon: "ph:book-bookmark" },
+  { title: "Chapter downloads", icon: "ph:download-simple" },
+  { title: "Scheduled library updates", icon: "ph:clock" },
+  { title: "Backup & migration", icon: "ph:shield-check" },
+  { title: "Optional authentication", icon: "ph:lock" },
+];
+---
+
+<BaseLayout
+  title="Self-hosted manga server"
+  description="Sumidoku is a self-hosted manga server: Aidoku WASM and OPDS sources, a full library with reading progress and downloads, a REST API, shipped as a single binary or a Docker image."
+>
+  <div class="flex flex-col min-h-screen sm-landing">
+    <Header />
+    <main id="main-content" tabindex="-1" class="flex-1">
+      {/* 1. Hero */}
+      <header class="hero">
+        <div class="heroBg"></div>
+        <div class="container">
+          <div class="heroInner">
+            <div>
+              <p class="eyebrow">Self-hosted manga server</p>
+              <h1 class="heroTitle">Every source. One library. Your server.</h1>
+              <p class="heroSub">
+                Sumidoku runs Aidoku-compatible WASM sources, OPDS catalogs and
+                your local files side by side — one library with reading
+                progress, downloads and scheduled updates, served from a
+                single binary or a Docker container.
+              </p>
+              <div class="ctaRow">
+                <a class="btnPrimary" href="/docs/installation">
+                  Get started <Icon name="ph:arrow-right" class="w-4 h-4" />
+                </a>
+                <a class="btnGhost" href={repoUrl} target="_blank" rel="noopener">
+                  <Icon name="ph:github-logo" class="w-[17px] h-[17px]" /> GitHub
+                </a>
+              </div>
+              <p class="heroTrust">MIT licensed. No account, no cloud — your library stays on your hardware.</p>
+            </div>
+            <div class="heroShots">
+              <figure class="shotFrame shotMain">
+                <img
+                  src="/img/shots/library.png"
+                  width="1200"
+                  height="675"
+                  alt="Sumidoku web UI showing the manga library with cover grid and category tabs"
+                  fetchpriority="high"
+                  decoding="async"
+                />
+              </figure>
+            </div>
+          </div>
+        </div>
+      </header>
+
+      {/* 2. Sources */}
+      <section class="section">
+        <div class="container">
+          <div class="split">
+            <figure class="shotFrame">
+              <img
+                src="/img/shots/source-repos.png"
+                width="1200"
+                height="675"
+                alt="Sumidoku browse page listing Aidoku-compatible source repositories with language filters"
+                loading="lazy"
+                decoding="async"
+              />
+            </figure>
+            <div>
+              <p class="eyebrow">Sources</p>
+              <h2 class="sectionTitle">Read from anywhere.</h2>
+              <p class="sectionSub">
+                Run source packages from any Aidoku-compatible repository:
+                listings, search, filters, source home pages and settings all
+                work server-side. Add Komga, Kavita or Calibre-Web catalogs
+                over OPDS, or read manga straight from a local directory.
+              </p>
+              <div class="miniGrid" style="margin-top: 1.8rem;">
+                {sourceFeatures.map((f) => (
+                  <div class="mini">
+                    <Icon name={f.icon} class="w-[20px] h-[20px]" />
+                    {f.title}
+                  </div>
+                ))}
+              </div>
+              <div class="ctaRow" style="margin-top: 2rem;">
+                <a class="btnGhost" href="/docs/installation#installing-sources">
+                  Installing sources <Icon name="ph:arrow-right" class="w-4 h-4" />
+                </a>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* 3. Library */}
+      <section class="section">
+        <div class="container">
+          <div class="sectionCenter">
+            <p class="eyebrow">Library &amp; reading</p>
+            <h2 class="sectionTitle">Your whole collection, kept in order.</h2>
+            <p class="sectionSub">
+              Categories and Aidoku-style filter groups organize the library;
+              reading progress, history and downloads follow you across
+              chapters. Scheduled updates keep everything current, and
+              versioned backups keep it safe.
+            </p>
+          </div>
+          <div class="miniGrid miniGridWide">
+            {libraryFeatures.map((f) => (
+              <div class="mini">
+                <Icon name={f.icon} class="w-[20px] h-[20px]" />
+                {f.title}
+              </div>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* 4. Quick start */}
+      <section class="section">
+        <div class="container">
+          <div class="split">
+            <div>
+              <p class="eyebrow">Quick start</p>
+              <h2 class="sectionTitle">Up in one command.</h2>
+              <p class="sectionSub">
+                One compose file, one container, and the web UI is listening on
+                port 3000. Everything — database, settings, cover cache and
+                source packages — lives under <code>/config</code>, so backups
+                and moves are trivial.
+              </p>
+              <div class="chipRow" style="margin-top: 1.6rem;" aria-label="Platforms">
+                <span class="chip">Docker</span>
+                <span class="chip">Linux</span>
+                <span class="chip">macOS</span>
+                <span class="chip">Windows</span>
+              </div>
+              <p class="sectionSub" style="margin-top: 1.2rem; font-size: 0.95rem;">
+                Prefer an app? The release also ships a portable Windows build
+                that sits in the notification area and opens the web UI on
+                click.
+              </p>
+              <div class="ctaRow" style="margin-top: 2rem;">
+                <a class="btnPrimary" href={releasesUrl} target="_blank" rel="noopener">
+                  Download Sumidoku
+                </a>
+                <a class="btnGhost" href="/docs/intro">
+                  Documentation <Icon name="ph:arrow-right" class="w-4 h-4" />
+                </a>
+              </div>
+            </div>
+            <div class="codePanel">
+              <div class="codeCaption">
+                <span>docker-compose.yml</span>
+                <span>docker compose up -d</span>
+              </div>
+              <Code code={composeFile} lang="yaml" />
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* 5. Migration */}
+      <section class="section">
+        <div class="container">
+          <div class="sectionCenter">
+            <p class="eyebrow">Backup &amp; migration</p>
+            <h2 class="sectionTitle">Bring your library with you.</h2>
+            <p class="sectionSub">
+              Moving from another reader is a one-file import. Versioned JSON
+              backups with scheduled retention go the other way, so nothing is
+              ever locked in.
+            </p>
+          </div>
+          <div class="statRow">
+            <div class="stat">
+              <div class="statValue">.aib</div>
+              <p class="statLabel">Import libraries from Aidoku.</p>
+            </div>
+            <div class="stat">
+              <div class="statValue">.tachibk</div>
+              <p class="statLabel">Import from Suwayomi and Mihon.</p>
+            </div>
+            <div class="stat">
+              <div class="statValue">.proto.gz</div>
+              <p class="statLabel">Compressed Mihon backups welcome too.</p>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* 6. Open source */}
+      <section class="section">
+        <div class="container">
+          <div class="sectionCenter">
+            <h2 class="sectionTitle">Open source. No lock-in.</h2>
+          </div>
+          <div class="cardGrid">
+            <article class="card">
+              <div class="cardIcon">
+                <Icon name="ph:scroll" class="w-[26px] h-[26px]" />
+              </div>
+              <h3 class="cardTitle">MIT licensed</h3>
+              <p class="cardBody">
+                The server, the WASM runtime and the web UI are all open
+                source under the MIT license.
+              </p>
+            </article>
+            <article class="card">
+              <div class="cardIcon">
+                <Icon name="ph:cube" class="w-[26px] h-[26px]" />
+              </div>
+              <h3 class="cardTitle">One Rust binary</h3>
+              <p class="cardBody">
+                No JVM, no runtime to install. The web UI is embedded in the
+                server, and a full REST API lives under <code>/api/v1</code>.
+              </p>
+            </article>
+            <article class="card">
+              <div class="cardIcon">
+                <Icon name="ph:hard-drive" class="w-[26px] h-[26px]" />
+              </div>
+              <h3 class="cardTitle">Your data</h3>
+              <p class="cardBody">
+                Library, progress and downloads live in one folder on your
+                machine, in open formats you can back up and move anywhere.
+              </p>
+            </article>
+          </div>
+          <div class="sectionCenter" style="margin-top: 2.4rem; margin-bottom: 0;">
+            <a class="btnGhost" href={repoUrl} target="_blank" rel="noopener">
+              View on GitHub <Icon name="ph:arrow-right" class="w-4 h-4" />
+            </a>
+          </div>
+        </div>
+      </section>
+
+      {/* 7. Final CTA */}
+      <section class="final">
+        <div class="finalBg"></div>
+        <div class="container">
+          <h2 class="finalTitle">Ready to read?</h2>
+          <div class="ctaRow">
+            <a class="btnPrimary" href="/docs/installation">
+              Get started <Icon name="ph:arrow-right" class="w-4 h-4" />
+            </a>
+            <a class="btnGhost" href={releasesUrl} target="_blank" rel="noopener">
+              Download <Icon name="ph:download-simple" class="w-4 h-4" />
+            </a>
+          </div>
+          <div class="finalMeta">
+            <span>Sumidoku for Docker, Linux, macOS and Windows</span>
+            <span>Sources from any Aidoku-compatible repository</span>
+          </div>
+        </div>
+      </section>
+    </main>
+    <Footer />
+  </div>
+</BaseLayout>
+
+<style>
+  /* Headline: keep it to two lines on desktop. */
+  .sm-landing .heroTitle {
+    font-size: clamp(2.4rem, 4.4vw, 3.6rem);
+  }
+
+  .sm-landing .heroTrust {
+    margin: 1.4rem 0 0;
+    font-size: 0.9rem;
+    color: var(--sm-text-muted);
+  }
+
+  .sm-landing .finalMeta {
+    margin-top: 2.2rem;
+    display: flex;
+    flex-direction: column;
+    gap: 0.3rem;
+    font-size: 0.88rem;
+    color: var(--sm-text-muted);
+  }
+
+  /* Single hero screenshot: full width (the 88% rule is for the two-shot
+     layout with a floating overlap). */
+  .sm-landing .heroShots .shotMain {
+    width: 100%;
+  }
+
+  /* Centered library grid: three columns on wide screens. */
+  .sm-landing .miniGridWide {
+    max-width: 56rem;
+    margin: 0 auto;
+  }
+</style>

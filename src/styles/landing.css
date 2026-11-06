@@ -1,0 +1,993 @@
+/* Landing page: shared layout in the Sumidoku design language. Global on purpose (Code/Tabs/Icon render child markup the
+   pages don't own); every selector is prefixed with .sm-landing so nothing
+   leaks onto Nimbus chrome or docs content. */
+
+.sm-landing {
+  background: var(--sm-bg);
+  color: var(--sm-text);
+  overflow-x: clip;
+}
+
+.sm-landing .container {
+  max-width: 71.25rem;
+  margin-inline: auto;
+  padding-inline: 1rem;
+}
+
+/* ---------- hero ---------- */
+
+.sm-landing .hero {
+  position: relative;
+  padding: clamp(3rem, 9vh, 6rem) 0 4rem;
+}
+
+.sm-landing .heroBg {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  background:
+    radial-gradient(52rem 30rem at 78% 12%, var(--sm-glow-a), transparent 62%),
+    radial-gradient(38rem 26rem at 12% 88%, var(--sm-glow-r), transparent 60%);
+}
+
+.sm-landing .heroInner {
+  position: relative;
+  display: grid;
+  grid-template-columns: 1.05fr 0.95fr;
+  gap: 3.5rem;
+  align-items: center;
+}
+
+.sm-landing .eyebrow {
+  font-family: var(--nb-font-mono);
+  font-size: 0.72rem;
+  font-weight: 500;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+  color: var(--sm-accent);
+  margin: 0 0 1.1rem;
+}
+
+.sm-landing .heroTitle {
+  font-family: var(--nb-font-display);
+  font-size: clamp(2.6rem, 5.2vw, 4.2rem);
+  font-weight: 700;
+  letter-spacing: -0.035em;
+  line-height: 1.05;
+  margin: 0 0 1.25rem;
+  background: linear-gradient(155deg, var(--sm-grad-a) 30%, var(--sm-grad-b) 85%);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+}
+
+.sm-landing .heroSub {
+  font-size: 1.08rem;
+  line-height: 1.65;
+  color: var(--sm-text-muted);
+  max-width: 34rem;
+  margin: 0 0 2rem;
+}
+
+.sm-landing .ctaRow {
+  display: flex;
+  gap: 0.9rem;
+  flex-wrap: wrap;
+}
+
+.sm-landing .btnPrimary,
+.sm-landing .btnGhost {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.72rem 1.5rem;
+  border-radius: 999px;
+  font-size: 0.95rem;
+  font-weight: 600;
+  letter-spacing: -0.01em;
+  text-decoration: none;
+  white-space: nowrap;
+  transition: transform 0.18s cubic-bezier(0.16, 1, 0.3, 1), background 0.18s, border-color 0.18s;
+}
+
+.sm-landing .btnPrimary {
+  background: var(--sm-cta-bg);
+  color: var(--sm-cta-fg);
+}
+
+.sm-landing .btnPrimary:hover {
+  background: #e8264a;
+  color: #ffffff;
+  text-decoration: none;
+  transform: translateY(-2px);
+}
+
+[data-mode="dark"] .sm-landing .btnPrimary:hover {
+  background: #ff4d6e;
+}
+
+.sm-landing .btnGhost {
+  border: 1px solid var(--sm-border);
+  color: var(--sm-text);
+  background: var(--sm-surface);
+}
+
+.sm-landing .btnGhost:hover {
+  border-color: rgba(255, 47, 82, 0.5);
+  color: var(--sm-text);
+  text-decoration: none;
+  transform: translateY(-2px);
+}
+
+.sm-landing .btnPrimary:active,
+.sm-landing .btnGhost:active {
+  transform: scale(0.98);
+}
+
+.sm-landing .chipRow {
+  display: flex;
+  gap: 0.6rem;
+  flex-wrap: wrap;
+  margin-top: 1.8rem;
+}
+
+.sm-landing .chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.32rem 0.9rem;
+  border-radius: 999px;
+  border: 1px solid var(--sm-border);
+  background: var(--sm-surface);
+  color: var(--sm-text-muted);
+  font-family: var(--nb-font-mono);
+  font-size: 0.74rem;
+  letter-spacing: 0.02em;
+  text-decoration: none;
+}
+
+.sm-landing .chip:hover {
+  border-color: rgba(255, 47, 82, 0.5);
+  text-decoration: none;
+}
+
+.sm-landing .heroArt {
+  display: flex;
+  justify-content: center;
+}
+
+.sm-landing .heroIcon {
+  width: min(19rem, 68%);
+  height: auto;
+  filter: drop-shadow(0 32px 80px rgba(255, 47, 82, 0.35))
+    drop-shadow(0 12px 32px rgba(255, 138, 61, 0.18));
+}
+
+.sm-landing .heroCode {
+  position: relative;
+  border-radius: 14px;
+  border: 1px solid var(--sm-border);
+  background: var(--sm-surface);
+  overflow: hidden;
+}
+
+/* Blend the Nimbus code figure into the panel: one border, one radius. */
+.sm-landing .heroCode .nb-code-figure,
+.sm-landing .codePanel .nb-code-figure {
+  margin: 0;
+  border: 0;
+  border-radius: 0;
+  background: transparent;
+}
+
+.sm-landing .heroCode pre {
+  margin: 0;
+  font-size: 0.8rem;
+  line-height: 1.7;
+}
+
+.sm-landing .codeCaption {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0.55rem 1rem;
+  border-bottom: 1px solid var(--sm-border);
+  font-family: var(--nb-font-mono);
+  font-size: 0.68rem;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--sm-text-muted);
+}
+
+.sm-landing .codeCaption span:last-child {
+  color: var(--sm-accent);
+}
+
+/* ---------- sections ---------- */
+
+.sm-landing .section {
+  padding: 4rem 0;
+}
+
+.sm-landing .sectionHead {
+  max-width: 40rem;
+  margin-bottom: 2.8rem;
+}
+
+.sm-landing .sectionTitle {
+  font-family: var(--nb-font-display);
+  font-size: clamp(1.8rem, 3vw, 2.5rem);
+  letter-spacing: -0.03em;
+  line-height: 1.12;
+  margin: 0 0 0.9rem;
+}
+
+.sm-landing .sectionSub {
+  font-size: 1rem;
+  line-height: 1.65;
+  color: var(--sm-text-muted);
+  margin: 0;
+}
+
+/* ---------- cards ---------- */
+
+.sm-landing .cardGrid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 1.1rem;
+}
+
+.sm-landing .card {
+  position: relative;
+  border: 1px solid var(--sm-border);
+  border-radius: 14px;
+  background: var(--sm-surface);
+  padding: 1.7rem;
+  overflow: hidden;
+  transition: transform 0.25s cubic-bezier(0.16, 1, 0.3, 1), border-color 0.25s;
+}
+
+.sm-landing .card:hover {
+  transform: translateY(-3px);
+  border-color: rgba(255, 47, 82, 0.35);
+}
+
+.sm-landing .cardWide {
+  grid-column: span 2;
+}
+
+.sm-landing .cardIcon {
+  color: var(--sm-accent);
+  margin-bottom: 1rem;
+}
+
+/* Platform cards: uniform crop across portrait and landscape shots. */
+.sm-landing .cardShot {
+  margin: -1.7rem -1.7rem 1.2rem;
+  aspect-ratio: 4 / 3;
+  overflow: hidden;
+  border-bottom: 1px solid var(--sm-border);
+}
+
+.sm-landing .cardShot img {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: top center;
+}
+
+.sm-landing .pill {
+  display: inline-block;
+  font-family: var(--nb-font-mono);
+  font-size: 0.66rem;
+  font-weight: 500;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--sm-accent);
+  background: rgba(255, 47, 82, 0.13);
+  border-radius: 999px;
+  padding: 0.22rem 0.7rem;
+  margin-bottom: 0.8rem;
+}
+
+.sm-landing .cardTitle {
+  font-family: var(--nb-font-display);
+  font-size: 1.12rem;
+  letter-spacing: -0.015em;
+  margin: 0 0 0.55rem;
+}
+
+.sm-landing .cardBody {
+  font-size: 0.92rem;
+  line-height: 1.6;
+  color: var(--sm-text-muted);
+  margin: 0;
+}
+
+.sm-landing .cardBody code {
+  font-size: 0.82em;
+}
+
+.sm-landing .cardCjk {
+  background:
+    radial-gradient(20rem 14rem at 85% 0%, rgba(255, 47, 82, 0.16), transparent 65%),
+    radial-gradient(14rem 12rem at 0% 100%, rgba(255, 138, 61, 0.08), transparent 60%),
+    var(--sm-surface);
+}
+
+.sm-landing .cjkGlyphs {
+  position: absolute;
+  right: 1.2rem;
+  bottom: -0.6rem;
+  font-size: 4.6rem;
+  font-weight: 700;
+  letter-spacing: -0.05em;
+  background: linear-gradient(155deg, rgba(255, 47, 82, 0.3), rgba(255, 138, 61, 0.3));
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+  user-select: none;
+}
+
+.sm-landing .card .nb-code-figure {
+  margin: 0.9rem 0 0;
+}
+
+.sm-landing .card pre {
+  font-size: 0.74rem;
+}
+
+/* ---------- quickstart ---------- */
+
+.sm-landing .split {
+  display: grid;
+  grid-template-columns: 0.9fr 1.1fr;
+  gap: 3.5rem;
+  align-items: center;
+}
+
+.sm-landing .steps {
+  display: flex;
+  flex-direction: column;
+  margin-top: 2rem;
+}
+
+.sm-landing .step {
+  display: flex;
+  gap: 1rem;
+  padding: 1.1rem 0;
+}
+
+.sm-landing .step + .step {
+  border-top: 1px solid var(--sm-border);
+}
+
+.sm-landing .stepName {
+  font-weight: 650;
+  font-size: 0.98rem;
+  white-space: nowrap;
+  min-width: 8.5rem;
+}
+
+.sm-landing .stepDesc {
+  font-size: 0.92rem;
+  color: var(--sm-text-muted);
+  line-height: 1.6;
+  margin: 0;
+}
+
+.sm-landing .codePanel {
+  border-radius: 14px;
+  border: 1px solid var(--sm-border);
+  background: var(--sm-surface);
+  overflow: hidden;
+}
+
+.sm-landing .codePanel pre {
+  margin: 0;
+  font-size: 0.8rem;
+}
+
+/* ---------- clients ---------- */
+
+.sm-landing .clients {
+  text-align: center;
+}
+
+.sm-landing .clients .chipRow {
+  justify-content: center;
+  margin-top: 2.4rem;
+}
+
+.sm-landing .clients .chip {
+  padding: 0.6rem 1.3rem;
+  font-size: 0.92rem;
+  font-weight: 550;
+  font-family: var(--nb-font-sans);
+  color: var(--sm-text);
+}
+
+.sm-landing .clients .chip svg {
+  color: var(--sm-accent);
+}
+
+/* ---------- faq ---------- */
+
+.sm-landing .faqGrid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 1.1rem;
+}
+
+.sm-landing .faqItem {
+  border: 1px solid var(--sm-border);
+  border-radius: 14px;
+  background: var(--sm-surface);
+  padding: 1.5rem 1.7rem;
+}
+
+.sm-landing .faqQuestion {
+  font-family: var(--nb-font-display);
+  font-size: 1rem;
+  letter-spacing: -0.01em;
+  margin: 0 0 0.5rem;
+}
+
+.sm-landing .faqAnswer {
+  font-size: 0.92rem;
+  line-height: 1.6;
+  color: var(--sm-text-muted);
+  margin: 0;
+}
+
+.sm-landing .faqAnswer a {
+  color: var(--sm-accent);
+}
+
+/* ---------- final cta ---------- */
+
+.sm-landing .final {
+  position: relative;
+  text-align: center;
+  padding: 6rem 0 7rem;
+}
+
+.sm-landing .finalBg {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  background:
+    radial-gradient(40rem 20rem at 50% 100%, rgba(255, 47, 82, 0.1), transparent 65%),
+    radial-gradient(30rem 16rem at 88% 100%, rgba(255, 138, 61, 0.07), transparent 60%);
+}
+
+.sm-landing .finalTitle {
+  font-family: var(--nb-font-display);
+  font-size: clamp(2rem, 4vw, 3rem);
+  letter-spacing: -0.03em;
+  margin: 0 0 2rem;
+}
+
+.sm-landing .final .ctaRow {
+  justify-content: center;
+}
+
+/* ---------- screenshots ---------- */
+
+.sm-landing .shotFrame {
+  border: 1px solid var(--sm-border);
+  border-radius: 18px;
+  overflow: hidden;
+  background: var(--sm-surface);
+  box-shadow: 0 28px 70px -28px rgba(0, 0, 0, 0.5);
+}
+
+.sm-landing .shotFrame img {
+  display: block;
+  width: 100%;
+  height: auto;
+}
+
+.sm-landing .heroShots {
+  position: relative;
+}
+
+.sm-landing .heroShots .shotMain {
+  width: 88%;
+  margin-left: auto;
+}
+
+.sm-landing .heroShots .shotFloat {
+  position: absolute;
+  left: -4%;
+  bottom: -9%;
+  width: 36%;
+}
+
+/* ---------- stat blocks ---------- */
+
+.sm-landing .statRow {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 1.1rem;
+  margin-top: 2.6rem;
+}
+
+.sm-landing .stat {
+  border: 1px solid var(--sm-border);
+  border-radius: 14px;
+  background: var(--sm-surface);
+  padding: 1.5rem 1.6rem;
+  text-align: center;
+}
+
+.sm-landing .statValue {
+  font-family: var(--nb-font-display);
+  font-size: 1.3rem;
+  font-weight: 700;
+  letter-spacing: -0.02em;
+}
+
+.sm-landing .statLabel {
+  font-size: 0.86rem;
+  line-height: 1.5;
+  color: var(--sm-text-muted);
+  margin: 0.35rem 0 0;
+}
+
+/* ---------- flow ---------- */
+
+.sm-landing .flowRow {
+  display: flex;
+  align-items: center;
+  gap: 0.55rem;
+  flex-wrap: wrap;
+  margin: 2.2rem 0;
+}
+
+.sm-landing .flowStep {
+  padding: 0.5rem 1.05rem;
+  border: 1px solid var(--sm-border);
+  border-radius: 999px;
+  background: var(--sm-surface);
+  font-size: 0.88rem;
+  font-weight: 550;
+  white-space: nowrap;
+}
+
+.sm-landing .flowArrow {
+  color: var(--sm-accent);
+  font-size: 0.9rem;
+  user-select: none;
+}
+
+/* ---------- platform / mini grids ---------- */
+
+.sm-landing .platformGrid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 1.1rem;
+}
+
+.sm-landing .miniGrid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 0.8rem;
+}
+
+.sm-landing .mini {
+  display: flex;
+  align-items: center;
+  gap: 0.7rem;
+  padding: 0.9rem 1.1rem;
+  border: 1px solid var(--sm-border);
+  border-radius: 12px;
+  background: var(--sm-surface);
+  font-size: 0.9rem;
+  font-weight: 550;
+}
+
+.sm-landing .mini svg {
+  color: var(--sm-accent);
+  flex-shrink: 0;
+}
+
+/* ---------- diagram ---------- */
+
+.sm-landing .diagram {
+  border: 1px solid var(--sm-border);
+  border-radius: 14px;
+  background: var(--sm-surface);
+  padding: 2.2rem 1.6rem;
+  overflow-x: auto;
+}
+
+/* Box-and-connector diagrams. Bars between rows rely on equal-width
+   columns: the bar spans from the first column center to the last. */
+.sm-landing .eco {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  min-width: 30rem;
+}
+
+.sm-landing .ecoBox {
+  display: inline-block;
+  border: 1px solid var(--sm-border);
+  border-radius: 12px;
+  background: var(--sm-bg);
+  padding: 0.6rem 1.15rem;
+  font-weight: 600;
+  font-size: 0.94rem;
+  line-height: 1.3;
+  text-align: center;
+}
+
+.sm-landing .ecoRoot,
+.sm-landing .ecoHl {
+  border-color: rgba(255, 47, 82, 0.55);
+}
+
+.sm-landing .ecoCap {
+  display: block;
+  font-size: 0.72rem;
+  font-weight: 400;
+  color: var(--sm-text-muted);
+  margin-top: 0.15rem;
+}
+
+.sm-landing .ecoLine {
+  width: 1px;
+  height: 1.5rem;
+  background: var(--sm-border);
+}
+
+.sm-landing .ecoLabel {
+  font-family: var(--nb-font-mono);
+  font-size: 0.68rem;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--sm-text-muted);
+  margin: 0.3rem 0;
+}
+
+.sm-landing .ecoRow {
+  display: grid;
+  position: relative;
+  align-self: stretch;
+}
+
+.sm-landing .ecoRow::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  height: 1px;
+  background: var(--sm-border);
+}
+
+.sm-landing .ecoRow5 {
+  grid-template-columns: repeat(5, 1fr);
+}
+
+.sm-landing .ecoRow5::before {
+  left: 10%;
+  right: 10%;
+}
+
+.sm-landing .ecoRow3 {
+  grid-template-columns: repeat(3, 1fr);
+}
+
+.sm-landing .ecoRow3::before {
+  left: 16.67%;
+  right: 16.67%;
+}
+
+.sm-landing .ecoRow4 {
+  grid-template-columns: repeat(4, 1fr);
+}
+
+.sm-landing .ecoRow4::before {
+  left: 12.5%;
+  right: 12.5%;
+}
+
+.sm-landing .ecoCol {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  min-width: 0;
+}
+
+.sm-landing .ecoChip {
+  font-size: 0.78rem;
+  font-weight: 550;
+  padding: 0.32rem 0.8rem;
+  border: 1px solid var(--sm-border);
+  border-radius: 999px;
+  background: var(--sm-bg);
+  white-space: nowrap;
+}
+
+.sm-landing .ecoPlat {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 0.45rem;
+}
+
+@media (max-width: 640px) {
+  .sm-landing .eco {
+    min-width: 0;
+  }
+
+  .sm-landing .ecoRow5 {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 0.7rem;
+  }
+
+  .sm-landing .ecoRow::before,
+  .sm-landing .ecoRow5 .ecoCol > .ecoLine:first-child {
+    display: none;
+  }
+}
+
+/* ---------- compare table ---------- */
+
+.sm-landing .tableWrap {
+  overflow-x: auto;
+  border: 1px solid var(--sm-border);
+  border-radius: 14px;
+  background: var(--sm-surface);
+}
+
+.sm-landing .compare {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 0.92rem;
+  min-width: 34rem;
+}
+
+.sm-landing .compare th,
+.sm-landing .compare td {
+  padding: 0.85rem 1.2rem;
+  text-align: left;
+  border-bottom: 1px solid var(--sm-border);
+}
+
+.sm-landing .compare tbody th {
+  font-weight: 400;
+}
+
+/* Keep the capability column visible while the value columns scroll. */
+.sm-landing .compare tbody th,
+.sm-landing .compare thead th:first-child {
+  position: sticky;
+  left: 0;
+  z-index: 1;
+  background: var(--sm-surface);
+}
+
+@media (max-width: 640px) {
+  .sm-landing .compare {
+    font-size: 0.85rem;
+    min-width: 27rem;
+  }
+
+  .sm-landing .compare th,
+  .sm-landing .compare td {
+    padding: 0.75rem 0.7rem;
+  }
+
+  .sm-landing .compare tbody th,
+  .sm-landing .compare thead th:first-child {
+    width: 8.5rem;
+    box-shadow: 1px 0 0 var(--sm-border);
+  }
+}
+
+.sm-landing .compare tr:last-child td {
+  border-bottom: 0;
+}
+
+.sm-landing .compare thead th {
+  font-family: var(--nb-font-mono);
+  font-size: 0.72rem;
+  font-weight: 500;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--sm-text-muted);
+}
+
+.sm-landing .compare .yes {
+  color: var(--sm-accent);
+  font-weight: 700;
+}
+
+.sm-landing .compare .no {
+  color: var(--sm-text-muted);
+}
+
+/* ---------- screenshot gallery ---------- */
+
+.sm-landing .galleryTabs {
+  display: flex;
+  gap: 0.5rem;
+  justify-content: center;
+  margin-bottom: 1.8rem;
+}
+
+.sm-landing .galleryTab {
+  padding: 0.45rem 1.25rem;
+  border-radius: 999px;
+  border: 1px solid var(--sm-border);
+  background: var(--sm-surface);
+  color: var(--sm-text-muted);
+  font-size: 0.88rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: border-color 0.18s, color 0.18s;
+}
+
+.sm-landing .galleryTab[aria-selected="true"] {
+  color: var(--sm-text);
+  border-color: rgba(255, 47, 82, 0.55);
+}
+
+.sm-landing .shotRow {
+  display: grid;
+  grid-auto-flow: column;
+  grid-auto-columns: min(15rem, 62%);
+  gap: 1rem;
+  overflow-x: auto;
+  scroll-snap-type: x mandatory;
+  padding-bottom: 0.8rem;
+}
+
+.sm-landing .shotRow > figure {
+  scroll-snap-align: start;
+  margin: 0;
+}
+
+.sm-landing .shotRow.wide {
+  grid-auto-columns: min(30rem, 78%);
+}
+
+/* ---------- demo ---------- */
+
+.sm-landing .demoCreds {
+  margin: 2rem auto 0;
+  display: flex;
+  justify-content: center;
+  gap: 1.1rem;
+  flex-wrap: wrap;
+}
+
+.sm-landing .demoCred {
+  border: 1px solid var(--sm-border);
+  border-radius: 14px;
+  background: var(--sm-surface);
+  padding: 1rem 1.5rem;
+  text-align: left;
+}
+
+.sm-landing .demoCredLabel {
+  display: block;
+  font-size: 0.78rem;
+  font-weight: 600;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--sm-text-muted);
+}
+
+.sm-landing .demoCredValue {
+  display: block;
+  margin-top: 0.3rem;
+  font-family: var(--nb-font-mono);
+  font-size: 1.02rem;
+  color: var(--sm-text);
+}
+
+/* ---------- centered section head ---------- */
+
+.sm-landing .sectionCenter {
+  text-align: center;
+  max-width: 44rem;
+  margin: 0 auto 2.8rem;
+}
+
+.sm-landing .sectionCenter .sectionSub {
+  margin-top: 0.9rem;
+}
+
+/* ---------- responsive ---------- */
+
+@media (max-width: 1024px) {
+  .sm-landing .heroInner {
+    grid-template-columns: 1fr;
+    gap: 2.6rem;
+  }
+
+  /* In flow: the absolute float shot is taller than the main shot here and
+     would cover the CTAs above and the gallery below. */
+  .sm-landing .heroShots {
+    display: flex;
+    align-items: flex-end;
+  }
+
+  .sm-landing .heroShots .shotMain {
+    order: 2;
+    width: 74%;
+    margin-left: 0;
+  }
+
+  .sm-landing .heroShots .shotFloat {
+    position: relative;
+    /* Drop the desktop offsets: relative positioning would still apply them
+       and push the shot past the page gutter. */
+    left: 0;
+    bottom: 0;
+    z-index: 1;
+    order: 1;
+    width: 32%;
+    margin-right: -8%;
+  }
+
+  .sm-landing .heroIcon {
+    width: min(12rem, 50%);
+  }
+
+  .sm-landing .cardGrid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  .sm-landing .cardWide {
+    grid-column: span 2;
+  }
+
+  .sm-landing .split {
+    grid-template-columns: 1fr;
+    gap: 2.4rem;
+  }
+
+  .sm-landing .platformGrid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  .sm-landing .miniGrid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media (max-width: 640px) {
+  .sm-landing .cardGrid,
+  .sm-landing .faqGrid,
+  .sm-landing .statRow,
+  .sm-landing .platformGrid,
+  .sm-landing .miniGrid {
+    grid-template-columns: 1fr;
+  }
+
+  .sm-landing .flowRow {
+    flex-direction: column;
+    align-items: stretch;
+    text-align: center;
+  }
+
+  .sm-landing .flowArrow {
+    transform: rotate(90deg);
+  }
+
+  .sm-landing .cardWide {
+    grid-column: span 1;
+  }
+
+  .sm-landing .section {
+    padding: 3.5rem 0;
+  }
+
+  .sm-landing .step {
+    flex-direction: column;
+    gap: 0.3rem;
+  }
+}

@@ -1,0 +1,63 @@
+---
+title: "Introduction"
+description: "What Sumidoku is, its features, and where to go next."
+sidebar:
+  order: 0
+---
+
+## What is Sumidoku?
+
+Sumidoku is a self-hosted manga server written in Rust and licensed under the
+MIT license. It runs Aidoku WASM sources and OPDS catalogs server-side,
+exposes a REST API at `/api/v1`, and ships as a single binary or a Docker
+image with the web UI embedded.
+
+The source code lives on GitHub:
+[Sumidoku/Sumidoku](https://github.com/Sumidoku/Sumidoku).
+
+## Features
+
+- **Aidoku WASM sources** — run source packages from any Aidoku-compatible
+  repository: listings, search, filters, source home pages, settings,
+  JavaScript execution, canvas drawing, and partial-result streaming all
+  work server-side.
+- **Source repositories** — add Aidoku-style source repos, browse with
+  language/NSFW filters, one-click install and update.
+- **Local source** — a built-in source reads manga straight from a local
+  directory (`<manga>/<chapter>` image folders or CBZ files), with
+  `ComicInfo.xml` metadata and cover fallback.
+- **OPDS sources** — add Komga, Kavita, Calibre-Web and other OPDS 1.2 or
+  2.0 catalogs as sources, with optional per-catalog credentials.
+- **Library and reading** — categories and Aidoku-style filter groups
+  (saved rule sets over reading state, source, content rating and
+  category), reading progress, history, chapter downloads, and scheduled
+  library updates.
+- **Cloudflare bypass** — an optional
+  [trawl](https://github.com/germondai/trawl) sidecar solves a challenged
+  host once, then keeps routing it through trawl. See
+  [Sidecars](/docs/sidecars).
+- **Real-browser login** — the same trawl sidecar doubles as the webview
+  browser backend, cookies landing in the source's session.
+- **Single-owner authentication** — off by default; once an admin password
+  is set, username + password login guards the web UI and REST API. One
+  built-in admin owns all data, with session tokens and long-lived API
+  keys. See [Authentication](/docs/authentication).
+- **Backup and migration** — versioned JSON backup, scheduled backups with
+  retention, and imports from Aidoku (`.aib`) and Suwayomi/Mihon
+  (`.tachibk`, `.proto.gz`). See [Backup & Import](/docs/backup).
+
+## Quick start
+
+```sh
+docker compose up -d
+```
+
+The compose file pulls the published `sumidoku/sumidoku:latest` image and
+mounts `./config` and `./downloads`. Open http://localhost:3000 — everything
+runs with defaults.
+
+The full install walkthrough — Docker, release binaries, the portable
+Windows desktop app, and building from source — is on the
+[Installation](/docs/installation) page. Configuration (environment
+variables, `config.toml`, precedence) lives in
+[Configuration](/docs/configuration).

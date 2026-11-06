@@ -1,0 +1,71 @@
+---
+title: "Contributing"
+description: "How issues and PRs are triaged and reviewed, and the rules for public writing."
+sidebar:
+  order: 8
+---
+
+Issues and pull requests are welcome on
+[GitHub](https://github.com/Sumidoku/Sumidoku). Sumidoku is built and
+maintained by agent sessions: scheduled agent sessions sweep open issues
+and PRs, triage them, review them, and start work on the ones that fit the
+project's direction.
+
+## Before opening a PR
+
+Read these first:
+
+- [docs/code-standards.md](https://github.com/Sumidoku/Sumidoku/blob/main/docs/code-standards.md)
+  — a fix needs a test that fails without it; run the full suite; the PR
+  records what was run.
+- [docs/contributors.md](https://github.com/Sumidoku/Sumidoku/blob/main/docs/contributors.md)
+  — what stops a review for possible harm, what is closed unreviewed.
+- [AGENTS.md](https://github.com/Sumidoku/Sumidoku/blob/main/AGENTS.md) —
+  build and test commands, repo layout.
+
+The short version:
+
+1. One PR, one goal. Unrelated refactors get their own PR.
+2. `cargo nextest run --workspace` and
+   `cargo clippy --workspace --all-targets -- -D warnings` pass; for web UI
+   changes, `cd webui && npm run check && npm run build` too.
+3. Say in the PR what you ran and what it printed.
+
+## How community PRs are reviewed
+
+A reviewer (an agent session) pulls the PR, runs it, and breaks the fix on
+purpose to watch the new test go red, then posts the conclusion on the PR.
+
+Reviews look for harm first. Any one of these stops the review until the
+maintainer has looked:
+
+- It changes `.github/` (workflows, actions, permissions, secrets), the
+  Dockerfile, or the release flow.
+- It adds a network address, an upload, telemetry, or sends a credential,
+  token, cookie or file anywhere it didn't go before.
+- It reads or writes a credential file or another app's config the goal
+  doesn't need.
+- It adds a dependency, a `replace` in `Cargo.toml`, an npm install
+  script, a binary, a minified or encoded blob, or code built from a
+  string at run time.
+- It adds a relay, reseller, affiliate or advertisement address.
+
+A PR that changes what the maintainer has ruled on, resubmits a closed
+idea with nothing new, arrives in near-identical bursts, or is spam or
+machine-made filler is closed with a short reason, without a full review.
+
+Merging follows the maintainer's standing authorization: an agent merges
+work it has verified against the code standards with CI green on the
+reviewed head; a change to a deliberate product decision, or a PR stopped
+by the harm-first check, always waits for the maintainer's explicit word.
+Blocking an author likewise always needs the maintainer's explicit word —
+an agent only proposes, with evidence.
+
+## Public writing rules
+
+Docs, lessons, and issue/PR text record mechanisms and numbers, never
+local machine details: no hostnames, absolute paths, internal domains or
+IPs, and no how-or-where a tool was installed on a private machine. Do not
+name or quote the maintainer or relay their private messages in public
+writing. Describe technical decisions directly, without personal
+attribution.

@@ -1,0 +1,92 @@
+---
+---
+
+<footer class="footer">
+  <div class="inner">
+    <div class="cols">
+      <div class="col">
+        <h3 class="colTitle">Get Sumidoku</h3>
+        <a class="link" href="https://github.com/Sumidoku/Sumidoku/releases" target="_blank" rel="noopener">Releases</a>
+        <a class="link" href="https://hub.docker.com/r/sumidoku/sumidoku" target="_blank" rel="noopener">Docker Hub</a>
+        <a class="link" href="https://github.com/Sumidoku/Sumidoku/pkgs/container/sumidoku" target="_blank" rel="noopener">GitHub Container Registry</a>
+      </div>
+      <div class="col">
+        <h3 class="colTitle">Resources</h3>
+        <a class="link" href="/docs/intro">Documentation</a>
+        <a class="link" href="/docs/installation">Installation</a>
+        <a class="link" href="/docs/configuration">Configuration</a>
+        <a class="link" href="/docs/architecture">Architecture</a>
+        <a class="link" href="/docs/contributing">Contributing</a>
+      </div>
+      <div class="col">
+        <h3 class="colTitle">Project</h3>
+        <a class="link" href="https://github.com/Sumidoku/Sumidoku" target="_blank" rel="noopener">GitHub</a>
+        <a class="link" href="https://github.com/Sumidoku/Sumidoku/issues" target="_blank" rel="noopener">Issues</a>
+        <a class="link" href="https://github.com/Sumidoku/Sumidoku/blob/main/LICENSE" target="_blank" rel="noopener">MIT License</a>
+      </div>
+    </div>
+    <p class="copyright">
+      Sumidoku is open source under the MIT License. Aidoku-compatible sources are built by their respective communities.
+    </p>
+  </div>
+</footer>
+
+<style>
+  .footer {
+    background: var(--sm-footer-bg);
+    border-top: 1px solid var(--sm-border);
+    color: var(--sm-text-muted);
+  }
+
+  .inner {
+    max-width: 64rem;
+    margin: 0 auto;
+    padding: 3rem 1.5rem 2rem;
+  }
+
+  .cols {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 2rem;
+  }
+
+  .col {
+    display: flex;
+    flex-direction: column;
+    gap: 0.55rem;
+  }
+
+  .colTitle {
+    font-size: 0.95rem;
+    font-weight: 700;
+    color: var(--sm-text);
+    margin: 0 0 0.35rem;
+  }
+
+  .link {
+    color: var(--sm-text-muted);
+    font-size: 0.92rem;
+    text-decoration: none;
+    width: fit-content;
+  }
+
+  .link:hover {
+    color: var(--sm-accent);
+    text-decoration: none;
+  }
+
+  .copyright {
+    margin: 2.5rem 0 0;
+    padding-top: 1.5rem;
+    border-top: 1px solid var(--sm-border);
+    font-size: 0.85rem;
+    text-align: center;
+  }
+
+  @media (max-width: 640px) {
+    .cols {
+      grid-template-columns: 1fr;
+      gap: 1.6rem;
+    }
+  }
+</style>
